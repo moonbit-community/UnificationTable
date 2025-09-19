@@ -1,10 +1,9 @@
 {
-  "name": "BigOrangeQWQ/unification_table",
-  "version": "0.1.2",
+  "name": "chaijie/disjoint-set",
+  "version": "0.1.3",
   "readme": "README.md",
-  "repository": "https://github.com/BigOrangeQWQ/UnificationTable",
+  "repository": "https://github.com/chaijie2018/disjoint-set",
   "license": "Apache-2.0",
-  "keywords": ["data-structure", "algorithm", "unification", "table"],
-  "description": "A module for unification table operations in data structures and algorithms.",
-  "source": "src"
+  "keywords": ["disjoint-set", "union-find", "unification"],
+  "description": "A optimized implementation of union-find in MoonBit."
 }

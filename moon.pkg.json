@@ -1,0 +1,3 @@
+{
+  "import": ["chaijie/disjoint-set/internal/snapshot_array"]
+}

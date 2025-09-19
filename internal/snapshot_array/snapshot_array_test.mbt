@@ -1,6 +1,6 @@
 ///|
 test "SnapshotArray::new" {
-  let arr = new(capacity=5)
+  let arr = SnapshotArray::new(capacity=5)
   assert_true(arr.length() == 0)
   let _ = arr.start_snapshot()
   arr.push(1)
@@ -10,7 +10,7 @@ test "SnapshotArray::new" {
 
 ///|
 test "SnapshotArray::length" {
-  let arr = new(capacity=5)
+  let arr = SnapshotArray::new(capacity=5)
   assert_eq(arr.length(), 0)
   arr.push(1)
   assert_eq(arr.length(), 1)
@@ -18,7 +18,7 @@ test "SnapshotArray::length" {
 
 ///|
 test "SnapshotArray::get" {
-  let arr = new(capacity=5)
+  let arr = SnapshotArray::new(capacity=5)
   arr.push(1)
   arr.push(2)
   assert_eq(arr.get(0).unwrap(), 1)
@@ -27,7 +27,7 @@ test "SnapshotArray::get" {
 
 ///|
 test "SnapshotArray::get" {
-  let arr = new(capacity=5)
+  let arr = SnapshotArray::new(capacity=5)
   let s1 = arr.start_snapshot()
   arr.push(1)
   arr.push(2)
@@ -40,7 +40,7 @@ test "SnapshotArray::get" {
 
 ///|
 test "SnapshotArray::in_snapshot" {
-  let arr : SnapshotArray[Int] = new()
+  let arr : SnapshotArray[Int] = SnapshotArray::new()
   inspect(arr.in_snapshot(), content="false")
   let _ = arr.start_snapshot()
   inspect(arr.in_snapshot(), content="true")
@@ -48,7 +48,7 @@ test "SnapshotArray::in_snapshot" {
 
 ///|
 test "SnapshotArray::rollback" {
-  let arr = new(capacity=5)
+  let arr = SnapshotArray::new(capacity=5)
   let _ = arr.start_snapshot()
   arr.push(1)
   let s2 = arr.start_snapshot()
@@ -60,7 +60,7 @@ test "SnapshotArray::rollback" {
 
 ///|
 test "SnapshotArray::push" {
-  let arr = new()
+  let arr = SnapshotArray::new()
   let snapshot = arr.start_snapshot()
   arr.push(1)
   inspect(arr.length(), content="1")
@@ -71,7 +71,7 @@ test "SnapshotArray::push" {
 
 ///|
 test "SnapshotArray::extend" {
-  let arr = new()
+  let arr = SnapshotArray::new()
   arr.extend([1, 2, 3].iter())
   inspect(arr.length(), content="3")
   inspect(arr.get(0).unwrap(), content="1")
@@ -79,7 +79,7 @@ test "SnapshotArray::extend" {
 
 ///|
 test "SnapshotArray::set" {
-  let arr = new()
+  let arr = SnapshotArray::new()
   arr.push(1)
   let snapshot = arr.start_snapshot()
   arr.set(0, 42)
@@ -90,7 +90,7 @@ test "SnapshotArray::set" {
 
 ///|
 test "SnapshotArray::set_and_get" {
-  let arr = new(capacity=5)
+  let arr = SnapshotArray::new(capacity=5)
   arr.push(1)
   arr.push(2)
   arr.set(0, 3)
@@ -105,7 +105,7 @@ test "SnapshotArray::set_and_get" {
 
 ///|
 test "SnapshotArray::set_all" {
-  let arr = new()
+  let arr = SnapshotArray::new()
   arr.extend([1, 2, 3].iter())
   let snapshot = arr.start_snapshot()
   arr.set_all(fn(x) { x * 2 })
@@ -116,7 +116,7 @@ test "SnapshotArray::set_all" {
 
 ///|
 test "SnapshotArray::set_all_with_snapshot" {
-  let arr = new(capacity=5)
+  let arr = SnapshotArray::new(capacity=5)
   let _ = arr.start_snapshot()
   let s1 = arr.start_snapshot()
   arr.push(1)
@@ -136,7 +136,7 @@ test "SnapshotArray::set_all_with_snapshot" {
 
 ///|
 test "SnapshotArray::start_snapshot" {
-  let arr = new()
+  let arr = SnapshotArray::new()
   arr.push(1)
   let snapshot = arr.start_snapshot()
   arr.push(2)
@@ -146,7 +146,7 @@ test "SnapshotArray::start_snapshot" {
 
 ///|
 test "SnapshotArray::action_since_snapshot" {
-  let arr = new()
+  let arr = SnapshotArray::new()
   let snapshot = arr.start_snapshot()
   arr.push(1)
   arr.push(2)
@@ -155,7 +155,7 @@ test "SnapshotArray::action_since_snapshot" {
 
 ///|
 test "SnapshotArray::rollback_to" {
-  let arr = new()
+  let arr = SnapshotArray::new()
   arr.push(1)
   let snapshot = arr.start_snapshot()
   arr.push(2)

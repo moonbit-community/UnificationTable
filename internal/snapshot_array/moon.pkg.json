@@ -1,0 +1,3 @@
+{
+  "import": ["chaijie/disjoint-set/internal/undo_logs"]
+}

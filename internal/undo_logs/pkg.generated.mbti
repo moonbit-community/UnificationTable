@@ -1,19 +1,13 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "BigOrangeQWQ/unification_table/undo_logs"
+package "chaijie/disjoint-set/internal/undo_logs"
 
 // Values
 fn[T] from_iter(Iter[Undo[T]], capacity? : Int) -> UndoLogs[T]
 
-fn[T] new(capacity? : Int) -> UndoLogs[T]
-
-fn[T] newElem(Int) -> Undo[T]
-
-fn[T] setElem(Int, T) -> Undo[T]
-
 // Errors
 
 // Types and methods
-pub enum Undo[T] {
+pub(all) enum Undo[T] {
   NewElem(Int)
   SetElem(Int, T)
 }
@@ -33,12 +27,12 @@ fn[T] UndoLogs::in_snapshot(Self[T]) -> Bool
 fn[T] UndoLogs::iter(Self[T]) -> Iter[Undo[T]]
 fn[T] UndoLogs::last(Self[T]) -> Undo[T]?
 fn[T] UndoLogs::length(Self[T]) -> Int
+fn[T] UndoLogs::new(capacity? : Int) -> Self[T]
 fn[T] UndoLogs::num_open_snapshots(Self[T]) -> Int
 fn[T] UndoLogs::pop(Self[T]) -> Undo[T]?
 fn[T] UndoLogs::push(Self[T], Undo[T]) -> Unit
 fn[T] UndoLogs::rollback_to(Self[T], Int) -> Array[Undo[T]]
 fn[T] UndoLogs::start_snapshot(Self[T]) -> Int
-impl[T : Show] Show for UndoLogs[T]
 
 // Type aliases
 

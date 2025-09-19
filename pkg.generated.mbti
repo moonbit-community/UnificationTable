@@ -1,0 +1,65 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "chaijie/disjoint-set"
+
+import(
+  "chaijie/disjoint-set/internal/snapshot_array"
+)
+
+// Values
+fn new_snapshot(@snapshot_array.Snapshot) -> Snapshot
+
+// Errors
+
+// Types and methods
+pub struct Snapshot {
+  snapshot : @snapshot_array.Snapshot
+}
+
+pub struct UnificationTable[T] {
+  values : @snapshot_array.SnapshotArray[VarValue[T]]
+}
+fn[T] UnificationTable::commit(Self[T], Snapshot) -> Unit
+fn[T] UnificationTable::find(Self[T], VarIndex) -> VarIndex
+fn[T] UnificationTable::find_root(Self[T], VarValue[T]) -> VarValue[T]
+fn[T] UnificationTable::get(Self[T], Int) -> VarValue[T]?
+fn[T] UnificationTable::in_snapshot(Self[T]) -> Bool
+fn[T] UnificationTable::index(Self[T], Int) -> VarIndex
+fn[T] UnificationTable::new(capacity~ : Int) -> Self[T]
+fn[T] UnificationTable::op_get(Self[T], Int) -> VarValue[T]
+fn[T] UnificationTable::op_set(Self[T], Int, VarValue[T]) -> Unit
+fn[T] UnificationTable::push(Self[T], T) -> Unit
+fn[T] UnificationTable::push_var(Self[T], VarValue[T]) -> Unit
+fn[T] UnificationTable::redirect_root(Self[T], Int, VarIndex, VarIndex, T) -> Unit
+fn[T] UnificationTable::reset(Self[T]) -> Unit
+fn[T] UnificationTable::rollback_to(Self[T], Snapshot) -> Unit
+fn[T] UnificationTable::set(Self[T], VarIndex, VarValue[T]) -> Unit
+fn[T] UnificationTable::start_snapshot(Self[T]) -> Snapshot
+fn[T] UnificationTable::unioned(Self[T], VarIndex, VarIndex) -> Bool
+fn[T] UnificationTable::unite(Self[T], VarIndex, VarIndex, T) -> VarIndex
+fn[T] UnificationTable::update(Self[T], VarIndex, (VarValue[T]) -> VarValue[T]) -> Unit
+fn[T] UnificationTable::value(Self[T], VarIndex) -> VarValue[T]
+impl[T : Show] Show for UnificationTable[T]
+
+pub struct VarIndex {
+  index : Int
+}
+fn VarIndex::new(Int) -> Self
+impl Eq for VarIndex
+impl Show for VarIndex
+
+pub struct VarValue[T] {
+  mut value : T
+  mut rank : Int
+  mut parent : VarIndex
+}
+fn[T] VarValue::modify(Self[T], T) -> Unit
+fn[T] VarValue::new(T, Int, VarIndex) -> Self[T]
+fn[T] VarValue::redirect(Self[T], VarIndex) -> Self[T]
+fn[T] VarValue::root(Self[T], Int, T) -> Self[T]
+impl[T : Eq] Eq for VarValue[T]
+impl[T : Show] Show for VarValue[T]
+
+// Type aliases
+
+// Traits
+
