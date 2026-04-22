@@ -1,0 +1,67 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "BigOrangeQWQ/unification_table/unify_table"
+
+import {
+  "BigOrangeQWQ/unification_table/snapshot_array",
+}
+
+// Values
+pub fn[T] new(capacity~ : Int) -> UnificationTable[T]
+
+pub fn new_index(Int) -> VarIndex
+
+pub fn new_snapshot(@snapshot_array.Snapshot) -> Snapshot
+
+pub fn[T] new_var_value(T, Int, VarIndex) -> VarValue[T]
+
+// Errors
+
+// Types and methods
+pub struct Snapshot {
+  snapshot : @snapshot_array.Snapshot
+}
+
+pub struct UnificationTable[T] {
+  values : @snapshot_array.SnapshotArray[VarValue[T]]
+}
+pub fn[T] UnificationTable::commit(Self[T], Snapshot) -> Unit
+pub fn[T] UnificationTable::find(Self[T], VarIndex) -> VarIndex
+pub fn[T] UnificationTable::find_root(Self[T], VarValue[T]) -> VarValue[T]
+pub fn[T] UnificationTable::get(Self[T], Int) -> VarValue[T]?
+pub fn[T] UnificationTable::in_snapshot(Self[T]) -> Bool
+pub fn[T] UnificationTable::index(Self[T], Int) -> VarIndex
+pub fn[T] UnificationTable::op_get(Self[T], Int) -> VarValue[T]
+pub fn[T] UnificationTable::op_set(Self[T], Int, VarValue[T]) -> Unit
+pub fn[T] UnificationTable::push(Self[T], T) -> Unit
+pub fn[T] UnificationTable::push_var(Self[T], VarValue[T]) -> Unit
+pub fn[T] UnificationTable::redirect_root(Self[T], Int, VarIndex, VarIndex, T) -> Unit
+pub fn[T] UnificationTable::reset(Self[T]) -> Unit
+pub fn[T] UnificationTable::rollback_to(Self[T], Snapshot) -> Unit
+pub fn[T] UnificationTable::set(Self[T], VarIndex, VarValue[T]) -> Unit
+pub fn[T] UnificationTable::start_snapshot(Self[T]) -> Snapshot
+pub fn[T] UnificationTable::unioned(Self[T], VarIndex, VarIndex) -> Bool
+pub fn[T] UnificationTable::unite(Self[T], VarIndex, VarIndex, T) -> VarIndex
+pub fn[T] UnificationTable::update(Self[T], VarIndex, (VarValue[T]) -> VarValue[T]) -> Unit
+pub fn[T] UnificationTable::value(Self[T], VarIndex) -> VarValue[T]
+pub impl[T : Show] Show for UnificationTable[T]
+
+pub struct VarIndex {
+  index : Int
+}
+pub impl Show for VarIndex
+
+pub struct VarValue[T] {
+  mut value : T
+  mut rank : Int
+  mut parent : VarIndex
+}
+pub fn[T] VarValue::modify(Self[T], T) -> Unit
+pub fn[T] VarValue::redirect(Self[T], VarIndex) -> Self[T]
+pub fn[T] VarValue::root(Self[T], Int, T) -> Self[T]
+pub impl[T : Eq] Eq for VarValue[T]
+pub impl[T : Show] Show for VarValue[T]
+
+// Type aliases
+
+// Traits
+

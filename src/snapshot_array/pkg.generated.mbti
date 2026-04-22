@@ -1,0 +1,46 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "BigOrangeQWQ/unification_table/snapshot_array"
+
+import {
+  "BigOrangeQWQ/unification_table/undo_logs",
+}
+
+// Values
+pub fn[T] from_iter(Iter[T], capacity? : Int) -> SnapshotArray[T]
+
+pub fn[T] new(capacity? : Int) -> SnapshotArray[T]
+
+pub fn[T] of(FixedArray[T]) -> SnapshotArray[T]
+
+// Errors
+
+// Types and methods
+pub struct Snapshot {
+  undo_count : Int
+}
+
+pub struct SnapshotArray[T] {
+  logs : @undo_logs.UndoLogs[T]
+  values : Array[T]
+}
+pub fn[T] SnapshotArray::action_since_snapshot(Self[T], Snapshot) -> ArrayView[@undo_logs.Undo[T]]
+pub fn[T] SnapshotArray::commit(Self[T], Snapshot) -> Unit
+pub fn[T] SnapshotArray::commit_all(Self[T]) -> Unit
+pub fn[T] SnapshotArray::extend(Self[T], Iter[T]) -> Unit
+pub fn[T] SnapshotArray::get(Self[T], Int) -> T?
+pub fn[T] SnapshotArray::in_snapshot(Self[T]) -> Bool
+pub fn[T] SnapshotArray::length(Self[T]) -> Int
+pub fn[T] SnapshotArray::op_get(Self[T], Int) -> T
+pub fn[T] SnapshotArray::op_set(Self[T], Int, T) -> Unit
+pub fn[T] SnapshotArray::push(Self[T], T) -> Unit
+pub fn[T] SnapshotArray::record(Self[T], @undo_logs.Undo[T]) -> Bool
+pub fn[T] SnapshotArray::reset(Self[T]) -> Unit
+pub fn[T] SnapshotArray::rollback_to(Self[T], Snapshot) -> Unit
+pub fn[T] SnapshotArray::set(Self[T], Int, T) -> Unit
+pub fn[T] SnapshotArray::set_all(Self[T], (T) -> T) -> Unit
+pub fn[T] SnapshotArray::start_snapshot(Self[T]) -> Snapshot
+
+// Type aliases
+
+// Traits
+

@@ -1,0 +1,46 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "BigOrangeQWQ/unification_table/undo_logs"
+
+// Values
+pub fn[T] from_iter(Iter[Undo[T]], capacity? : Int) -> UndoLogs[T]
+
+pub fn[T] new(capacity? : Int) -> UndoLogs[T]
+
+pub fn[T] newElem(Int) -> Undo[T]
+
+pub fn[T] setElem(Int, T) -> Undo[T]
+
+// Errors
+
+// Types and methods
+pub enum Undo[T] {
+  NewElem(Int)
+  SetElem(Int, T)
+}
+pub impl[T : Eq] Eq for Undo[T]
+pub impl[T : Show] Show for Undo[T]
+
+pub struct UndoLogs[T] {
+  logs : Array[Undo[T]]
+  mut num_open_snapshots : Int
+}
+pub fn[T] UndoLogs::action_since_snapshot(Self[T], Int) -> ArrayView[Undo[T]]
+pub fn[T] UndoLogs::clear(Self[T]) -> Unit
+pub fn[T] UndoLogs::commit(Self[T], Int) -> Unit
+pub fn[T] UndoLogs::extend(Self[T], Iter[Undo[T]]) -> Unit
+pub fn[T] UndoLogs::has_changes(Self[T], Int) -> Bool
+pub fn[T] UndoLogs::in_snapshot(Self[T]) -> Bool
+pub fn[T] UndoLogs::iter(Self[T]) -> Iter[Undo[T]]
+pub fn[T] UndoLogs::last(Self[T]) -> Undo[T]?
+pub fn[T] UndoLogs::length(Self[T]) -> Int
+pub fn[T] UndoLogs::num_open_snapshots(Self[T]) -> Int
+pub fn[T] UndoLogs::pop(Self[T]) -> Undo[T]?
+pub fn[T] UndoLogs::push(Self[T], Undo[T]) -> Unit
+pub fn[T] UndoLogs::rollback_to(Self[T], Int) -> Array[Undo[T]]
+pub fn[T] UndoLogs::start_snapshot(Self[T]) -> Int
+
+// Type aliases
+pub type Snapshot = Int
+
+// Traits
+
