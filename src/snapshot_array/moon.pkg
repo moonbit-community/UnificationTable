@@ -1,0 +1,7 @@
+import {
+  "BigOrangeQWQ/unification_table/undo_logs" @logs,
+}
+
+options(
+  name: "BigOrangeQWQ/unification_table/snapshot_array",
+)

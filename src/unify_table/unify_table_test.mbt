@@ -41,7 +41,6 @@ test "UnificationTable::index" {
 test "panic UnificationTable::index/out_of_bounds" {
   let table : UnificationTable[Int] = new(capacity=5)
   let _ = table.index(-1)
-
 }
 
 ///|
