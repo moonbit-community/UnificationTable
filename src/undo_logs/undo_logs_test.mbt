@@ -24,7 +24,7 @@ test "UndoLogs::length" {
 }
 
 ///|
-test "UndoLogs::num_open_snapshots" {
+test "UndoLogs::num_open_snapshots_nested" {
   let logs = new()
   let _ = logs.start_snapshot()
   assert_true(logs.num_open_snapshots() == 1)

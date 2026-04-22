@@ -17,7 +17,7 @@ test "SnapshotArray::length" {
 }
 
 ///|
-test "SnapshotArray::get" {
+test "SnapshotArray::get_with_snapshot" {
   let arr = new(capacity=5)
   arr.push(1)
   arr.push(2)
