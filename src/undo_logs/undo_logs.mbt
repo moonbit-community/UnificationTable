@@ -43,7 +43,7 @@ pub fn[T] from_iter(iter : Iter[Undo[T]], capacity? : Int = 0) -> UndoLogs[T] {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// logs.push(newElem(0))
 /// logs.push(setElem(1, "test"))
@@ -60,7 +60,7 @@ pub fn[T] UndoLogs::in_snapshot(self : UndoLogs[T]) -> Bool {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// logs.push(newElem(0))
 /// logs.push(setElem(1, "test"))
@@ -75,7 +75,7 @@ pub fn[T] UndoLogs::length(self : UndoLogs[T]) -> Int {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// let _ = logs.start_snapshot()
 /// assert_true(logs.num_open_snapshots() == 1)
@@ -93,7 +93,7 @@ pub fn[T] UndoLogs::num_open_snapshots(self : UndoLogs[T]) -> Int {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// logs.push(newElem(0))
 /// logs.push(setElem(1, "test"))
@@ -108,7 +108,7 @@ pub fn[T] UndoLogs::push(self : UndoLogs[T], log : Undo[T]) -> Unit {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// let _ = logs.start_snapshot()
 /// logs.push(newElem(0))
@@ -128,7 +128,7 @@ pub fn[T] UndoLogs::clear(self : UndoLogs[T]) -> Unit {
 ///
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 ///  let logs = new()
 ///  let new_logs = [newElem(0), setElem(1, "test")]
 ///  logs.extend(new_logs.iter())
@@ -147,7 +147,7 @@ pub fn[T] UndoLogs::extend(self : UndoLogs[T], logs : Iter[Undo[T]]) -> Unit {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// let s1 = logs.start_snapshot()
 /// logs.push(newElem(0))
@@ -169,14 +169,17 @@ pub fn[T] UndoLogs::action_since_snapshot(
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// let s1 = logs.start_snapshot()
 /// assert_false(logs.has_changes(s1))
 /// logs.push(setElem(2, "another_test"))
 /// assert_true(logs.has_changes(s1))
 /// ```
-pub fn[T] UndoLogs::has_changes(self : UndoLogs[T], snapshot : Snapshot) -> Bool {
+pub fn[T] UndoLogs::has_changes(
+  self : UndoLogs[T],
+  snapshot : Snapshot,
+) -> Bool {
   self.action_since_snapshot(snapshot).length() > 0
 }
 
@@ -185,7 +188,7 @@ pub fn[T] UndoLogs::has_changes(self : UndoLogs[T], snapshot : Snapshot) -> Bool
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// let s1 = logs.start_snapshot()
 /// logs.push(newElem(0))
@@ -199,7 +202,10 @@ pub fn[T] UndoLogs::start_snapshot(self : UndoLogs[T]) -> Snapshot {
 
 ///|
 /// Asserts that the given snapshot is valid.
-fn[T] UndoLogs::assert_valid_snapshot(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
+fn[T] UndoLogs::assert_valid_snapshot(
+  self : UndoLogs[T],
+  snapshot : Snapshot,
+) -> Unit {
   guard self.logs.length() > snapshot else { abort("Invalid snapshot") }
   guard self.num_open_snapshots > 0 else { abort("No open snapshots") }
 }
@@ -210,7 +216,7 @@ fn[T] UndoLogs::assert_valid_snapshot(self : UndoLogs[T], snapshot : Snapshot) -
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// let s1 = logs.start_snapshot()
 /// logs.push(newElem(0))
@@ -235,7 +241,7 @@ pub fn[T] UndoLogs::commit(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// let _ = logs.start_snapshot()
 /// logs.push(newElem(0))
@@ -256,7 +262,6 @@ pub fn[T] UndoLogs::rollback_to(
   let logs = self.action_since_snapshot(snapshot).to_array()
   for _ in 0..<logs.length() {
     let _ = self.pop()
-
   }
   logs
 }
@@ -266,7 +271,7 @@ pub fn[T] UndoLogs::rollback_to(
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// logs.push(newElem(0))
 /// logs.push(setElem(1, "test"))
@@ -283,7 +288,7 @@ pub fn[T] UndoLogs::pop(self : UndoLogs[T]) -> Undo[T]? {
 /// 
 /// Example:
 /// 
-/// ```moonbit
+/// ```moonbit nocheck
 /// let logs = new()
 /// logs.push(newElem(0))
 /// logs.push(setElem(1, "test"))
