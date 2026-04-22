@@ -300,7 +300,7 @@ pub fn[T] iter(self : UndoLogs[T]) -> Iter[Undo[T]] {
 }
 
 ///|
-pub impl[T : Eq] Eq for Undo[T] with op_equal(self, other : Undo[T]) -> Bool {
+pub impl[T : Eq] Eq for Undo[T] with equal(self, other : Undo[T]) -> Bool {
   match (self, other) {
     (NewElem(index1), NewElem(index2)) => index1 == index2
     (SetElem(index1, value1), SetElem(index2, value2)) =>
