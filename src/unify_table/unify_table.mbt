@@ -622,7 +622,7 @@ pub impl[T : Show] Show for VarValue[T] with output(self, logger : &Logger) {
   ..write_object(self.rank)
   ..write_string(", parent: ")
   ..write_object(self.parent)
-  ..write_string(" }")
+  .write_string(" }")
 }
 
 ///|
@@ -630,7 +630,7 @@ pub impl Show for VarIndex with output(self, logger : &Logger) {
   logger
   ..write_string("VarIndex { index: ")
   ..write_object(self.index)
-  ..write_string(" }")
+  .write_string(" }")
 }
 
 ///|
