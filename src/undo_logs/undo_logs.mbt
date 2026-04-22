@@ -51,7 +51,7 @@ pub fn[T] from_iter(iter : Iter[Undo[T]], capacity? : Int = 0) -> UndoLogs[T] {
 /// let _ = logs.start_snapshot()
 /// assert_true(logs.in_snapshot())
 /// ```
-pub fn[T] in_snapshot(self : UndoLogs[T]) -> Bool {
+pub fn[T] UndoLogs::in_snapshot(self : UndoLogs[T]) -> Bool {
   self.num_open_snapshots > 0
 }
 
@@ -66,7 +66,7 @@ pub fn[T] in_snapshot(self : UndoLogs[T]) -> Bool {
 /// logs.push(setElem(1, "test"))
 /// assert_eq(logs.length(), 2)
 /// ```
-pub fn[T] length(self : UndoLogs[T]) -> Int {
+pub fn[T] UndoLogs::length(self : UndoLogs[T]) -> Int {
   self.logs.length()
 }
 
@@ -84,7 +84,7 @@ pub fn[T] length(self : UndoLogs[T]) -> Int {
 /// logs.push(setElem(1, "test"))
 /// logs.commit(s1)
 /// ```
-pub fn[T] num_open_snapshots(self : UndoLogs[T]) -> Int {
+pub fn[T] UndoLogs::num_open_snapshots(self : UndoLogs[T]) -> Int {
   self.num_open_snapshots
 }
 
@@ -99,7 +99,7 @@ pub fn[T] num_open_snapshots(self : UndoLogs[T]) -> Int {
 /// logs.push(setElem(1, "test"))
 /// assert_eq(logs.length(), 2)
 /// ```
-pub fn[T] push(self : UndoLogs[T], log : Undo[T]) -> Unit {
+pub fn[T] UndoLogs::push(self : UndoLogs[T], log : Undo[T]) -> Unit {
   self.logs.push(log)
 }
 
@@ -118,7 +118,7 @@ pub fn[T] push(self : UndoLogs[T], log : Undo[T]) -> Unit {
 /// assert_true(logs.logs.length() == 0)
 /// assert_true(logs.num_open_snapshots == 0)
 /// ```
-pub fn[T] clear(self : UndoLogs[T]) -> Unit {
+pub fn[T] UndoLogs::clear(self : UndoLogs[T]) -> Unit {
   self.logs.clear()
   self.num_open_snapshots = 0
 }
@@ -136,7 +136,7 @@ pub fn[T] clear(self : UndoLogs[T]) -> Unit {
 ///  inspect(logs.logs[0], content="NewElem(0)")
 ///  inspect(logs.logs[1], content="SetElem(1, test)")
 /// ```
-pub fn[T] extend(self : UndoLogs[T], logs : Iter[Undo[T]]) -> Unit {
+pub fn[T] UndoLogs::extend(self : UndoLogs[T], logs : Iter[Undo[T]]) -> Unit {
   logs.each(fn(log) { self.push(log) })
 }
 
@@ -157,7 +157,7 @@ pub fn[T] extend(self : UndoLogs[T], logs : Iter[Undo[T]]) -> Unit {
 /// inspect(actions[0], content="NewElem(0)")
 /// inspect(actions[1], content="SetElem(1, test)")
 /// ```
-pub fn[T] action_since_snapshot(
+pub fn[T] UndoLogs::action_since_snapshot(
   self : UndoLogs[T],
   snapshot : Snapshot,
 ) -> ArrayView[Undo[T]] {
@@ -176,7 +176,7 @@ pub fn[T] action_since_snapshot(
 /// logs.push(setElem(2, "another_test"))
 /// assert_true(logs.has_changes(s1))
 /// ```
-pub fn[T] has_changes(self : UndoLogs[T], snapshot : Snapshot) -> Bool {
+pub fn[T] UndoLogs::has_changes(self : UndoLogs[T], snapshot : Snapshot) -> Bool {
   self.action_since_snapshot(snapshot).length() > 0
 }
 
@@ -192,14 +192,14 @@ pub fn[T] has_changes(self : UndoLogs[T], snapshot : Snapshot) -> Bool {
 /// logs.push(setElem(1, "test"))
 /// inspect(logs.action_since_snapshot(s1), content="[NewElem(0), SetElem(1, test)]")
 /// ```
-pub fn[T] start_snapshot(self : UndoLogs[T]) -> Snapshot {
+pub fn[T] UndoLogs::start_snapshot(self : UndoLogs[T]) -> Snapshot {
   self.num_open_snapshots += 1
   self.logs.length()
 }
 
 ///|
 /// Asserts that the given snapshot is valid.
-fn[T] assert_valid_snapshot(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
+fn[T] UndoLogs::assert_valid_snapshot(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
   guard self.logs.length() > snapshot else { abort("Invalid snapshot") }
   guard self.num_open_snapshots > 0 else { abort("No open snapshots") }
 }
@@ -218,7 +218,7 @@ fn[T] assert_valid_snapshot(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
 /// logs.commit(s1)
 /// assert_eq(logs.length(), 0)
 /// ```
-pub fn[T] commit(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
+pub fn[T] UndoLogs::commit(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
   self.assert_valid_snapshot(snapshot)
   if self.num_open_snapshots == 1 {
     // The root snapshot. It's safe to clear the undo log because
@@ -248,7 +248,7 @@ pub fn[T] commit(self : UndoLogs[T], snapshot : Snapshot) -> Unit {
 ///   content="[SetElem(3, another_rollback_test), NewElem(4)]",
 /// )
 /// ```
-pub fn[T] rollback_to(
+pub fn[T] UndoLogs::rollback_to(
   self : UndoLogs[T],
   snapshot : Snapshot,
 ) -> Array[Undo[T]] {
@@ -274,7 +274,7 @@ pub fn[T] rollback_to(
 /// assert_eq(popped, setElem(1, "test"))
 /// assert_eq(logs.length(), 1)
 /// ```
-pub fn[T] pop(self : UndoLogs[T]) -> Undo[T]? {
+pub fn[T] UndoLogs::pop(self : UndoLogs[T]) -> Undo[T]? {
   self.logs.pop()
 }
 
@@ -290,12 +290,12 @@ pub fn[T] pop(self : UndoLogs[T]) -> Undo[T]? {
 /// let last = logs.last().unwrap()
 /// assert_eq(last, setElem(1, "test"))
 /// ```
-pub fn[T] last(self : UndoLogs[T]) -> Undo[T]? {
+pub fn[T] UndoLogs::last(self : UndoLogs[T]) -> Undo[T]? {
   self.logs.last()
 }
 
 ///|
-pub fn[T] iter(self : UndoLogs[T]) -> Iter[Undo[T]] {
+pub fn[T] UndoLogs::iter(self : UndoLogs[T]) -> Iter[Undo[T]] {
   self.logs.iter()
 }
 

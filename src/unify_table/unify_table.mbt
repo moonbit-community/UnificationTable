@@ -65,7 +65,7 @@ pub fn[T] new_var_value(
 /// let var_value = var_value.redirect(new_parent)
 /// inspect(var_value.parent.index, content="1")
 /// ```
-pub fn[T] redirect(self : VarValue[T], to : VarIndex) -> VarValue[T] {
+pub fn[T] VarValue::redirect(self : VarValue[T], to : VarIndex) -> VarValue[T] {
   new_var_value(self.value, self.rank, to)
 }
 
@@ -86,7 +86,7 @@ pub fn[T] redirect(self : VarValue[T], to : VarIndex) -> VarValue[T] {
 /// inspect(var_value.value, content="100")
 /// inspect(var_value.rank, content="1")
 /// ```
-pub fn[T] root(self : VarValue[T], rank : Int, value : T) -> VarValue[T] {
+pub fn[T] VarValue::root(self : VarValue[T], rank : Int, value : T) -> VarValue[T] {
   new_var_value(value, rank, self.parent)
 }
 
@@ -103,7 +103,7 @@ pub fn[T] root(self : VarValue[T], rank : Int, value : T) -> VarValue[T] {
 /// var_value.modify(100)
 /// inspect(var_value.value, content="100")
 /// ```
-pub fn[T] modify(self : VarValue[T], value : T) -> Unit {
+pub fn[T] VarValue::modify(self : VarValue[T], value : T) -> Unit {
   self.value = value
 }
 
@@ -162,7 +162,7 @@ pub fn[T] new(capacity~ : Int) -> UnificationTable[T] {
 /// table.push(1)
 /// assert_true(table.values.length() == 1)
 /// ```
-pub fn[T] push(self : UnificationTable[T], value : T) -> Unit {
+pub fn[T] UnificationTable::push(self : UnificationTable[T], value : T) -> Unit {
   self.values.push({ value, rank: 0, parent: new_index(self.values.length()) })
 }
 
@@ -183,7 +183,7 @@ pub fn[T] push(self : UnificationTable[T], value : T) -> Unit {
 /// table.push_var(var_value)
 /// inspect(table.values.length(), content="1")
 /// ```
-pub fn[T] push_var(self : UnificationTable[T], value : VarValue[T]) -> Unit {
+pub fn[T] UnificationTable::push_var(self : UnificationTable[T], value : VarValue[T]) -> Unit {
   self.values.push(value)
 }
 
@@ -208,7 +208,7 @@ pub fn[T] push_var(self : UnificationTable[T], value : VarValue[T]) -> Unit {
 /// )
 /// inspect(table.get(1), content="None")
 /// ```
-pub fn[T] get(self : UnificationTable[T], index : Int) -> VarValue[T]? {
+pub fn[T] UnificationTable::get(self : UnificationTable[T], index : Int) -> VarValue[T]? {
   self.values.get(index)
 }
 
@@ -231,7 +231,7 @@ pub fn[T] get(self : UnificationTable[T], index : Int) -> VarValue[T]? {
 /// table.push(42)
 /// inspect(table.index(0).index, content="0")
 /// ```
-pub fn[T] index(self : UnificationTable[T], index : Int) -> VarIndex {
+pub fn[T] UnificationTable::index(self : UnificationTable[T], index : Int) -> VarIndex {
   if index < 0 || index >= self.values.length() {
     abort("Index out of bounds")
   }
@@ -257,7 +257,7 @@ pub fn[T] index(self : UnificationTable[T], index : Int) -> VarIndex {
 ///   content="VarValue { value: 42, rank: 0, parent: VarIndex { index: 0 } }",
 /// )
 /// ```
-pub fn[T] value(self : UnificationTable[T], index : VarIndex) -> VarValue[T] {
+pub fn[T] UnificationTable::value(self : UnificationTable[T], index : VarIndex) -> VarValue[T] {
   self.get(index.index).unwrap()
 }
 
@@ -279,7 +279,7 @@ pub fn[T] value(self : UnificationTable[T], index : VarIndex) -> VarValue[T] {
 ///   content="false",
 /// )
 /// ```
-pub fn[T] reset(self : UnificationTable[T]) -> Unit {
+pub fn[T] UnificationTable::reset(self : UnificationTable[T]) -> Unit {
   for index, value in self.values.values {
     value.rank = 0
     value.parent = new_index(index)
@@ -308,7 +308,7 @@ pub fn[T] reset(self : UnificationTable[T]) -> Unit {
 ///   content="Some(VarValue { value: 100, rank: 0, parent: VarIndex { index: 0 } })",
 /// )
 /// ```
-pub fn[T] set(
+pub fn[T] UnificationTable::set(
   self : UnificationTable[T],
   index : VarIndex,
   value : VarValue[T],
@@ -336,7 +336,7 @@ pub fn[T] set(
 ///   content="Some(VarValue { value: 100, rank: 0, parent: VarIndex { index: 0 } })",
 /// )
 /// ```
-pub fn[T] update(
+pub fn[T] UnificationTable::update(
   self : UnificationTable[T],
   index : VarIndex,
   func : (VarValue[T]) -> VarValue[T],
@@ -365,7 +365,7 @@ pub fn[T] update(
 /// table.redirect_root(1, new_index(0), new_index(1), 42)
 /// inspect(table.find(new_index(0)).index, content="1")
 /// ```
-pub fn[T] redirect_root(
+pub fn[T] UnificationTable::redirect_root(
   self : UnificationTable[T],
   new_rank : Int,
   old_index : VarIndex,
@@ -399,7 +399,7 @@ pub fn[T] redirect_root(
 ///   content="true",
 /// )
 /// ```
-pub fn[T] unioned(
+pub fn[T] UnificationTable::unioned(
   self : UnificationTable[T],
   index1 : VarIndex,
   index2 : VarIndex,
@@ -429,7 +429,7 @@ pub fn[T] unioned(
 /// let root = table.unite(table.index(0),table.index(1), 42)
 /// inspect(table.value(root).value, content="42")
 /// ```
-pub fn[T] unite(
+pub fn[T] UnificationTable::unite(
   self : UnificationTable[T],
   index1 : VarIndex,
   index2 : VarIndex,
@@ -476,7 +476,7 @@ pub fn[T] unite(
 /// let root = table.find(table.index(0))
 /// inspect(root.index, content="0")
 /// ```
-pub fn[T] find(self : UnificationTable[T], index : VarIndex) -> VarIndex {
+pub fn[T] UnificationTable::find(self : UnificationTable[T], index : VarIndex) -> VarIndex {
   let value = self.value(index)
   if value.parent == index {
     return index
@@ -510,7 +510,7 @@ pub fn[T] find(self : UnificationTable[T], index : VarIndex) -> VarIndex {
 /// let root = table.find_root(value)
 /// inspect(root.value, content="42")
 /// ```
-pub fn[T] find_root(
+pub fn[T] UnificationTable::find_root(
   self : UnificationTable[T],
   value : VarValue[T],
 ) -> VarValue[T] {
@@ -530,7 +530,7 @@ pub fn[T] find_root(
 /// let _ = table.start_snapshot()
 /// assert_true(table.in_snapshot())
 /// ```
-pub fn[T] in_snapshot(self : UnificationTable[T]) -> Bool {
+pub fn[T] UnificationTable::in_snapshot(self : UnificationTable[T]) -> Bool {
   self.values.in_snapshot()
 }
 
@@ -549,7 +549,7 @@ pub fn[T] in_snapshot(self : UnificationTable[T]) -> Bool {
 /// table.rollback_to(snapshot)
 /// inspect(table.values.length(), content="1")
 /// ```
-pub fn[T] start_snapshot(self : UnificationTable[T]) -> Snapshot {
+pub fn[T] UnificationTable::start_snapshot(self : UnificationTable[T]) -> Snapshot {
   let snapshot = self.values.start_snapshot()
   new_snapshot(snapshot)
 }
@@ -573,7 +573,7 @@ pub fn[T] start_snapshot(self : UnificationTable[T]) -> Snapshot {
 /// table.rollback_to(snapshot)
 /// inspect(table.values.length(), content="1")
 /// ```
-pub fn[T] rollback_to(self : UnificationTable[T], snapshot : Snapshot) -> Unit {
+pub fn[T] UnificationTable::rollback_to(self : UnificationTable[T], snapshot : Snapshot) -> Unit {
   self.values.rollback_to(snapshot.snapshot)
 }
 
@@ -595,17 +595,17 @@ pub fn[T] rollback_to(self : UnificationTable[T], snapshot : Snapshot) -> Unit {
 /// table.commit(snapshot)
 /// inspect(table.values.length(), content="2")
 /// ```
-pub fn[T] commit(self : UnificationTable[T], snapshot : Snapshot) -> Unit {
+pub fn[T] UnificationTable::commit(self : UnificationTable[T], snapshot : Snapshot) -> Unit {
   self.values.commit(snapshot.snapshot)
 }
 
 ///|
-pub fn[T] op_get(self : UnificationTable[T], index : Int) -> VarValue[T] {
+pub fn[T] UnificationTable::op_get(self : UnificationTable[T], index : Int) -> VarValue[T] {
   return self.get(index).unwrap()
 }
 
 ///|
-pub fn[T] op_set(
+pub fn[T] UnificationTable::op_set(
   self : UnificationTable[T],
   index : Int,
   value : VarValue[T],
