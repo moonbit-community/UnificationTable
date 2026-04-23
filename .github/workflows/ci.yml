@@ -27,6 +27,16 @@ jobs:
           moon version --all
           moon update
           moon check --deny-warn
+      
+      - name: moon info
+        run: |
+          moon info --target all
+          git diff --exit-code
+
+      - name: format diff
+        run: |
+          moon fmt
+          git diff --exit-code
 
       - name: Run tests with coverage
         run: |
