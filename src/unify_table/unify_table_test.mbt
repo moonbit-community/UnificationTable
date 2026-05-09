@@ -23,11 +23,11 @@ test "UnificationTable::push_var" {
 test "UnificationTable::get" {
   let table : UnificationTable[Int] = new(capacity=5)
   table.push(42)
-  inspect(
-    table.get(0),
-    content="Some(VarValue { value: 42, rank: 0, parent: VarIndex { index: 0 } })",
-  )
-  inspect(table.get(1), content="None")
+  let value = table.get(0).unwrap()
+  inspect(value.value, content="42")
+  inspect(value.rank, content="0")
+  inspect(value.parent.index, content="0")
+  assert_true(table.get(1) is None)
 }
 
 ///|
@@ -48,10 +48,10 @@ test "UnificationTable::value" {
   let table : UnificationTable[Int] = new(capacity=5)
   table.push(42)
   let index = new_index(0)
-  inspect(
-    table.value(index),
-    content="VarValue { value: 42, rank: 0, parent: VarIndex { index: 0 } }",
-  )
+  let value = table.value(index)
+  inspect(value.value, content="42")
+  inspect(value.rank, content="0")
+  inspect(value.parent.index, content="0")
 }
 
 ///|
@@ -87,10 +87,10 @@ test "UnificationTable::set" {
   table.push(42)
   let new_value = new_var_value(100, 0, new_index(0))
   table.set(new_index(0), new_value)
-  inspect(
-    table.get(0),
-    content="Some(VarValue { value: 100, rank: 0, parent: VarIndex { index: 0 } })",
-  )
+  let value = table.get(0).unwrap()
+  inspect(value.value, content="100")
+  inspect(value.rank, content="0")
+  inspect(value.parent.index, content="0")
 }
 
 ///|
@@ -98,10 +98,10 @@ test "UnificationTable::update" {
   let table : UnificationTable[Int] = new(capacity=5)
   table.push(42)
   table.update(new_index(0), fn(val) { val.root(val.rank, 100) })
-  inspect(
-    table.get(0),
-    content="Some(VarValue { value: 100, rank: 0, parent: VarIndex { index: 0 } })",
-  )
+  let value = table.get(0).unwrap()
+  inspect(value.value, content="100")
+  inspect(value.rank, content="0")
+  inspect(value.parent.index, content="0")
 }
 
 ///|
