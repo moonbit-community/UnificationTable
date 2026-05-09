@@ -259,7 +259,7 @@ pub fn[T] UndoLogs::rollback_to(
   snapshot : Snapshot,
 ) -> Array[Undo[T]] {
   self.assert_valid_snapshot(snapshot)
-  let logs = self.action_since_snapshot(snapshot).to_array()
+  let logs = self.action_since_snapshot(snapshot).to_owned()
   for _ in 0..<logs.length() {
     let _ = self.pop()
   }
