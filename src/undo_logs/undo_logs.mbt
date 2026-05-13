@@ -3,7 +3,7 @@
 pub enum Undo[T] {
   NewElem(Int)
   SetElem(Int, T)
-}
+} derive(Debug)
 
 ///|
 pub type Snapshot = Int

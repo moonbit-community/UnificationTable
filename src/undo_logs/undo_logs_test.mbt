@@ -103,9 +103,9 @@ test "UndoLogs::start_snapshot" {
   let s1 = logs.start_snapshot()
   logs.push(newElem(0))
   logs.push(setElem(1, "test"))
-  inspect(
+  debug_inspect(
     logs.action_since_snapshot(s1),
-    content="[NewElem(0), SetElem(1, test)]",
+    content="<ArrayView: [NewElem(0), SetElem(1, \"test\")]>",
   )
 }
 
@@ -120,9 +120,9 @@ test "UndoLogs::rollback_to" {
   let s3 = logs.start_snapshot()
   logs.push(setElem(3, "another_rollback_test"))
   logs.push(newElem(4))
-  inspect(
+  debug_inspect(
     logs.rollback_to(s3),
-    content="[SetElem(3, another_rollback_test), NewElem(4)]",
+    content="[SetElem(3, \"another_rollback_test\"), NewElem(4)]",
   )
 }
 

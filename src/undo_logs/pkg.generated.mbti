@@ -1,6 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "BigOrangeQWQ/unification_table/undo_logs"
 
+import {
+  "moonbitlang/core/debug",
+}
+
 // Values
 pub fn[T] from_iter(Iter[Undo[T]], capacity? : Int) -> UndoLogs[T]
 
@@ -16,7 +20,7 @@ pub fn[T] setElem(Int, T) -> Undo[T]
 pub enum Undo[T] {
   NewElem(Int)
   SetElem(Int, T)
-}
+} derive(@debug.Debug)
 pub impl[T : Eq] Eq for Undo[T]
 pub impl[T : Show] Show for Undo[T]
 
