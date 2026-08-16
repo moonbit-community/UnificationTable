@@ -124,12 +124,15 @@ pub fn new_snapshot(snapshot : @snapshot_array.Snapshot) -> Snapshot {
 }
 
 ///|
-pub impl[T : Eq] Eq for VarValue[T] with equal(self, other) {
+pub impl[T : Eq] Eq for VarValue[T] with fn equal(self, other) {
   self.value == other.value && self.parent == other.parent
 }
 
 ///|
-impl Eq for VarIndex with equal(self, other) {
+pub extend VarValue with Eq::{not_equal, equal}
+
+///|
+impl Eq for VarIndex with fn equal(self, other) {
   self.index == other.index
 }
 
@@ -627,7 +630,8 @@ pub fn[T] UnificationTable::commit(
 }
 
 ///|
-pub fn[T] UnificationTable::op_get(
+#alias("_[_]")
+pub fn[T] UnificationTable::get_at(
   self : UnificationTable[T],
   index : Int,
 ) -> VarValue[T] {
@@ -635,7 +639,8 @@ pub fn[T] UnificationTable::op_get(
 }
 
 ///|
-pub fn[T] UnificationTable::op_set(
+#alias("_[_]=_")
+pub fn[T] UnificationTable::set_at(
   self : UnificationTable[T],
   index : Int,
   value : VarValue[T],
@@ -644,7 +649,7 @@ pub fn[T] UnificationTable::op_set(
 }
 
 ///|
-pub impl[T : Show] Show for VarValue[T] with output(self, logger : &Logger) {
+pub impl[T : Show] Show for VarValue[T] with fn output(self, logger : &Logger) {
   logger
   ..write_string("VarValue { value: ")
   ..write_object(self.value)
@@ -656,7 +661,10 @@ pub impl[T : Show] Show for VarValue[T] with output(self, logger : &Logger) {
 }
 
 ///|
-pub impl Show for VarIndex with output(self, logger : &Logger) {
+pub extend VarValue with Show::{to_string, output}
+
+///|
+pub impl Show for VarIndex with fn output(self, logger : &Logger) {
   logger
   ..write_string("VarIndex { index: ")
   ..write_object(self.index)
@@ -664,7 +672,10 @@ pub impl Show for VarIndex with output(self, logger : &Logger) {
 }
 
 ///|
-pub impl[T : Show] Show for UnificationTable[T] with output(
+pub extend VarIndex with Show::{to_string, output}
+
+///|
+pub impl[T : Show] Show for UnificationTable[T] with fn output(
   self,
   logger : &Logger,
 ) {
@@ -675,3 +686,6 @@ pub impl[T : Show] Show for UnificationTable[T] with output(
     sep=", ",
   )
 }
+
+///|
+pub extend UnificationTable with Show::{to_string, output}

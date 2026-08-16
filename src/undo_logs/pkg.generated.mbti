@@ -21,6 +21,11 @@ pub enum Undo[T] {
   NewElem(Int)
   SetElem(Int, T)
 } derive(@debug.Debug)
+pub fn[T : Eq] Undo::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] Undo::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Show] Undo::output(Self[T], &Logger) -> Unit
+pub fn[T : @debug.Debug] Undo::to_repr(Self[T]) -> @debug.Repr
+pub fn[T : Show] Undo::to_string(Self[T]) -> String
 pub impl[T : Eq] Eq for Undo[T]
 pub impl[T : Show] Show for Undo[T]
 
@@ -29,9 +34,10 @@ pub struct UndoLogs[T] {
   mut num_open_snapshots : Int
 }
 pub fn[T] UndoLogs::action_since_snapshot(Self[T], Int) -> ArrayView[Undo[T]]
+#alias(extend)
+pub fn[T] UndoLogs::append_iter(Self[T], Iter[Undo[T]]) -> Unit
 pub fn[T] UndoLogs::clear(Self[T]) -> Unit
 pub fn[T] UndoLogs::commit(Self[T], Int) -> Unit
-pub fn[T] UndoLogs::extend(Self[T], Iter[Undo[T]]) -> Unit
 pub fn[T] UndoLogs::has_changes(Self[T], Int) -> Bool
 pub fn[T] UndoLogs::in_snapshot(Self[T]) -> Bool
 pub fn[T] UndoLogs::iter(Self[T]) -> Iter[Undo[T]]
@@ -47,4 +53,3 @@ pub fn[T] UndoLogs::start_snapshot(Self[T]) -> Int
 pub type Snapshot = Int
 
 // Traits
-
