@@ -6,6 +6,9 @@ pub enum Undo[T] {
 } derive(Debug)
 
 ///|
+pub extend Undo with Debug::{to_repr}
+
+///|
 pub type Snapshot = Int
 
 ///|
@@ -136,7 +139,11 @@ pub fn[T] UndoLogs::clear(self : UndoLogs[T]) -> Unit {
 ///  inspect(logs.logs[0], content="NewElem(0)")
 ///  inspect(logs.logs[1], content="SetElem(1, test)")
 /// ```
-pub fn[T] UndoLogs::extend(self : UndoLogs[T], logs : Iter[Undo[T]]) -> Unit {
+#alias(extend)
+pub fn[T] UndoLogs::append_iter(
+  self : UndoLogs[T],
+  logs : Iter[Undo[T]],
+) -> Unit {
   logs.each(fn(log) { self.push(log) })
 }
 
@@ -305,7 +312,7 @@ pub fn[T] UndoLogs::iter(self : UndoLogs[T]) -> Iter[Undo[T]] {
 }
 
 ///|
-pub impl[T : Eq] Eq for Undo[T] with equal(self, other : Undo[T]) -> Bool {
+pub impl[T : Eq] Eq for Undo[T] with fn equal(self, other : Undo[T]) -> Bool {
   match (self, other) {
     (NewElem(index1), NewElem(index2)) => index1 == index2
     (SetElem(index1, value1), SetElem(index2, value2)) =>
@@ -315,7 +322,10 @@ pub impl[T : Eq] Eq for Undo[T] with equal(self, other : Undo[T]) -> Bool {
 }
 
 ///|
-pub impl[T : Show] Show for Undo[T] with to_string(self) {
+pub extend Undo with Eq::{not_equal, equal}
+
+///|
+pub impl[T : Show] Show for Undo[T] with fn to_string(self) {
   match self {
     NewElem(index) => "NewElem(" + index.to_string() + ")"
     SetElem(index, value) =>
@@ -324,6 +334,9 @@ pub impl[T : Show] Show for Undo[T] with to_string(self) {
 }
 
 ///|
-pub impl[T : Show] Show for Undo[T] with output(self, logger : &Logger) {
+pub extend Undo with Show::{to_string, output}
+
+///|
+pub impl[T : Show] Show for Undo[T] with fn output(self, logger : &Logger) {
   logger.write_string(self.to_string())
 }

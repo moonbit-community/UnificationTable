@@ -28,17 +28,21 @@ pub fn[T] UnificationTable::commit(Self[T], Snapshot) -> Unit
 pub fn[T] UnificationTable::find(Self[T], VarIndex) -> VarIndex
 pub fn[T] UnificationTable::find_root(Self[T], VarValue[T]) -> VarValue[T]
 pub fn[T] UnificationTable::get(Self[T], Int) -> VarValue[T]?
+#alias("_[_]")
+pub fn[T] UnificationTable::get_at(Self[T], Int) -> VarValue[T]
 pub fn[T] UnificationTable::in_snapshot(Self[T]) -> Bool
 pub fn[T] UnificationTable::index(Self[T], Int) -> VarIndex
-pub fn[T] UnificationTable::op_get(Self[T], Int) -> VarValue[T]
-pub fn[T] UnificationTable::op_set(Self[T], Int, VarValue[T]) -> Unit
+pub fn[T : Show] UnificationTable::output(Self[T], &Logger) -> Unit
 pub fn[T] UnificationTable::push(Self[T], T) -> Unit
 pub fn[T] UnificationTable::push_var(Self[T], VarValue[T]) -> Unit
 pub fn[T] UnificationTable::redirect_root(Self[T], Int, VarIndex, VarIndex, T) -> Unit
 pub fn[T] UnificationTable::reset(Self[T]) -> Unit
 pub fn[T] UnificationTable::rollback_to(Self[T], Snapshot) -> Unit
 pub fn[T] UnificationTable::set(Self[T], VarIndex, VarValue[T]) -> Unit
+#alias("_[_]=_")
+pub fn[T] UnificationTable::set_at(Self[T], Int, VarValue[T]) -> Unit
 pub fn[T] UnificationTable::start_snapshot(Self[T]) -> Snapshot
+pub fn[T : Show] UnificationTable::to_string(Self[T]) -> String
 pub fn[T] UnificationTable::unioned(Self[T], VarIndex, VarIndex) -> Bool
 pub fn[T] UnificationTable::unite(Self[T], VarIndex, VarIndex, T) -> VarIndex
 pub fn[T] UnificationTable::update(Self[T], VarIndex, (VarValue[T]) -> VarValue[T]) -> Unit
@@ -48,6 +52,8 @@ pub impl[T : Show] Show for UnificationTable[T]
 pub struct VarIndex {
   index : Int
 }
+pub fn VarIndex::output(Self, &Logger) -> Unit
+pub fn VarIndex::to_string(Self) -> String
 pub impl Show for VarIndex
 
 pub struct VarValue[T] {
@@ -55,13 +61,16 @@ pub struct VarValue[T] {
   mut rank : Int
   mut parent : VarIndex
 }
+pub fn[T : Eq] VarValue::equal(Self[T], Self[T]) -> Bool
 pub fn[T] VarValue::modify(Self[T], T) -> Unit
+pub fn[T : Eq] VarValue::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Show] VarValue::output(Self[T], &Logger) -> Unit
 pub fn[T] VarValue::redirect(Self[T], VarIndex) -> Self[T]
 pub fn[T] VarValue::root(Self[T], Int, T) -> Self[T]
+pub fn[T : Show] VarValue::to_string(Self[T]) -> String
 pub impl[T : Eq] Eq for VarValue[T]
 pub impl[T : Show] Show for VarValue[T]
 
 // Type aliases
 
 // Traits
-

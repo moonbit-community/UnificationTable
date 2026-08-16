@@ -159,7 +159,8 @@ pub fn[T] SnapshotArray::reset(self : SnapshotArray[T]) -> Unit {
 /// inspect(arr.length(), content="3")
 /// inspect(arr.get(0).unwrap(), content="1")
 /// ```
-pub fn[T] SnapshotArray::extend(
+#alias(extend)
+pub fn[T] SnapshotArray::append_iter(
   self : SnapshotArray[T],
   iter : Iter[T],
 ) -> Unit {
@@ -389,7 +390,8 @@ pub fn[T] SnapshotArray::commit_all(self : SnapshotArray[T]) -> Unit {
 }
 
 ///|
-pub fn[T] SnapshotArray::op_get(self : SnapshotArray[T], index : Int) -> T {
+#alias("_[_]")
+pub fn[T] SnapshotArray::get_at(self : SnapshotArray[T], index : Int) -> T {
   if index < 0 || index >= self.values.length() {
     abort("Index out of bounds")
   }
@@ -397,7 +399,8 @@ pub fn[T] SnapshotArray::op_get(self : SnapshotArray[T], index : Int) -> T {
 }
 
 ///|
-pub fn[T] SnapshotArray::op_set(
+#alias("_[_]=_")
+pub fn[T] SnapshotArray::set_at(
   self : SnapshotArray[T],
   index : Int,
   value : T,
