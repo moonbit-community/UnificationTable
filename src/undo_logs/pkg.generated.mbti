@@ -6,45 +6,49 @@ import {
 }
 
 // Values
-pub fn[T] from_iter(Iter[Undo[T]], capacity? : Int) -> UndoLogs[T]
+pub fn[T] from_iter(Iter[Undo[T]], capacity? : Int32) -> UndoLogs[T]
 
-pub fn[T] new(capacity? : Int) -> UndoLogs[T]
+pub fn[T] new(capacity? : Int32) -> UndoLogs[T]
 
-pub fn[T] newElem(Int) -> Undo[T]
+pub fn[T] newElem(Int32) -> Undo[T]
 
-pub fn[T] setElem(Int, T) -> Undo[T]
+pub fn[T] setElem(Int32, T) -> Undo[T]
 
 // Errors
 
 // Types and methods
 pub enum Undo[T] {
-  NewElem(Int)
-  SetElem(Int, T)
+  NewElem(Int32)
+  SetElem(Int32, T)
 } derive(@debug.Debug)
+pub fn[T : Eq] Undo::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Eq] Undo::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Show] Undo::output(Self[T], &Logger) -> Unit
+pub fn[T : @debug.Debug] Undo::to_repr(Self[T]) -> @debug.Repr
+pub fn[T : Show] Undo::to_string(Self[T]) -> String
 pub impl[T : Eq] Eq for Undo[T]
 pub impl[T : Show] Show for Undo[T]
 
 pub struct UndoLogs[T] {
   logs : Array[Undo[T]]
-  mut num_open_snapshots : Int
+  mut num_open_snapshots : Int32
 }
-pub fn[T] UndoLogs::action_since_snapshot(Self[T], Int) -> ArrayView[Undo[T]]
+pub fn[T] UndoLogs::action_since_snapshot(Self[T], Int32) -> ArrayView[Undo[T]]
+pub fn[T] UndoLogs::append_iter(Self[T], Iter[Undo[T]]) -> Unit
 pub fn[T] UndoLogs::clear(Self[T]) -> Unit
-pub fn[T] UndoLogs::commit(Self[T], Int) -> Unit
-pub fn[T] UndoLogs::extend(Self[T], Iter[Undo[T]]) -> Unit
-pub fn[T] UndoLogs::has_changes(Self[T], Int) -> Bool
+pub fn[T] UndoLogs::commit(Self[T], Int32) -> Unit
+pub fn[T] UndoLogs::has_changes(Self[T], Int32) -> Bool
 pub fn[T] UndoLogs::in_snapshot(Self[T]) -> Bool
 pub fn[T] UndoLogs::iter(Self[T]) -> Iter[Undo[T]]
 pub fn[T] UndoLogs::last(Self[T]) -> Undo[T]?
-pub fn[T] UndoLogs::length(Self[T]) -> Int
-pub fn[T] UndoLogs::num_open_snapshots(Self[T]) -> Int
+pub fn[T] UndoLogs::length(Self[T]) -> Int32
+pub fn[T] UndoLogs::num_open_snapshots(Self[T]) -> Int32
 pub fn[T] UndoLogs::pop(Self[T]) -> Undo[T]?
 pub fn[T] UndoLogs::push(Self[T], Undo[T]) -> Unit
-pub fn[T] UndoLogs::rollback_to(Self[T], Int) -> Array[Undo[T]]
-pub fn[T] UndoLogs::start_snapshot(Self[T]) -> Int
+pub fn[T] UndoLogs::rollback_to(Self[T], Int32) -> Array[Undo[T]]
+pub fn[T] UndoLogs::start_snapshot(Self[T]) -> Int32
 
 // Type aliases
-pub type Snapshot = Int
+pub type Snapshot = Int32
 
 // Traits
-

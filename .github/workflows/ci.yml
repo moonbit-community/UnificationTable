@@ -13,6 +13,10 @@ on:
 
 jobs:
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [latest, nightly]
     runs-on: ubuntu-latest
     name: Setup MoonBit
     steps:
@@ -21,12 +25,14 @@ jobs:
 
       - name: Setup Moonbit
         uses: hustcer/setup-moonbit@develop
+        with:
+          version: ${{ matrix.version }}
 
       - name: Check Moonbit Version
         run: |
           moon version --all
           moon update
-          moon check --deny-warn
+          moon check --deny-warn --target all
       
       - name: moon info
         run: |
@@ -40,4 +46,4 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          moon test --enable-coverage
+          moon test --enable-coverage --target all

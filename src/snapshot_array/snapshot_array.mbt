@@ -6,7 +6,7 @@ pub struct SnapshotArray[T] {
 
 ///|
 pub struct Snapshot {
-  undo_count : Int
+  undo_count : Int32
 }
 
 ///|
@@ -17,21 +17,21 @@ pub struct Snapshot {
 /// let arr : SnapshotArray[Int] = new(capacity=5)
 /// assert_true(arr.length() == 0)
 /// ```
-pub fn[T] new(capacity? : Int = 0) -> SnapshotArray[T] {
-  { logs: @logs.new(), values: Array::new(capacity~) }
+pub fn[T] new(capacity~ : Int32 = 0) -> SnapshotArray[T] {
+  { logs: @logs.new(), values: Array(capacity~), }
 }
 
 ///|
-pub fn[T] from_iter(iter : Iter[T], capacity? : Int = 0) -> SnapshotArray[T] {
+pub fn[T] from_iter(iter : Iter[T], capacity~ : Int32 = 0) -> SnapshotArray[T] {
   let arr = new(capacity~)
-  arr.extend(iter)
+  arr.append_iter(iter)
   arr
 }
 
 ///|
 pub fn[T] of(values : FixedArray[T]) -> SnapshotArray[T] {
   let arr = new(capacity=values.length())
-  arr.extend(values.iter())
+  arr.append_iter(values.iter())
   arr
 }
 
@@ -45,7 +45,7 @@ pub fn[T] of(values : FixedArray[T]) -> SnapshotArray[T] {
 /// arr.push(1)
 /// assert_eq(arr.length(), 1)
 /// ```
-pub fn[T] SnapshotArray::length(self : SnapshotArray[T]) -> Int {
+pub fn[T] SnapshotArray::length(self : SnapshotArray[T]) -> Int32 {
   self.values.length()
 }
 
@@ -60,7 +60,7 @@ pub fn[T] SnapshotArray::length(self : SnapshotArray[T]) -> Int {
 /// assert_eq(arr.get(0).unwrap(), 1)
 /// assert_eq(arr.get(1).unwrap(), 2)
 /// ```
-pub fn[T] SnapshotArray::get(self : SnapshotArray[T], index : Int) -> T? {
+pub fn[T] SnapshotArray::get(self : SnapshotArray[T], index : Int32) -> T? {
   self.values.get(index)
 }
 
@@ -155,11 +155,11 @@ pub fn[T] SnapshotArray::reset(self : SnapshotArray[T]) -> Unit {
 ///
 /// ```moonbit nocheck
 /// let arr = new()
-/// arr.extend([1, 2, 3].iter())
+/// arr.append_iter([1, 2, 3].iter())
 /// inspect(arr.length(), content="3")
 /// inspect(arr.get(0).unwrap(), content="1")
 /// ```
-pub fn[T] SnapshotArray::extend(
+pub fn[T] SnapshotArray::append_iter(
   self : SnapshotArray[T],
   iter : Iter[T],
 ) -> Unit {
@@ -185,7 +185,7 @@ pub fn[T] SnapshotArray::extend(
 /// ```
 pub fn[T] SnapshotArray::set(
   self : SnapshotArray[T],
-  index : Int,
+  index : Int32,
   value : T,
 ) -> Unit {
   if index >= self.values.length() {
@@ -206,7 +206,7 @@ pub fn[T] SnapshotArray::set(
 /// Example:
 /// ```moonbit nocheck
 /// let arr = new()
-/// arr.extend([1, 2, 3].iter())
+/// arr.append_iter([1, 2, 3].iter())
 /// let snapshot = arr.start_snapshot()
 /// arr.set_all(fn(x) { x * 2 })
 /// inspect(arr.get(0).unwrap(), content="2")
@@ -247,7 +247,7 @@ pub fn[T] SnapshotArray::set_all(
 /// inspect(arr.length(), content="1")
 /// ```
 pub fn[T] SnapshotArray::start_snapshot(self : SnapshotArray[T]) -> Snapshot {
-  { undo_count: self.logs.start_snapshot() }
+  { undo_count: self.logs.start_snapshot(), }
 }
 
 ///|
@@ -389,7 +389,8 @@ pub fn[T] SnapshotArray::commit_all(self : SnapshotArray[T]) -> Unit {
 }
 
 ///|
-pub fn[T] SnapshotArray::op_get(self : SnapshotArray[T], index : Int) -> T {
+#alias("_[_]")
+pub fn[T] SnapshotArray::at(self : SnapshotArray[T], index : Int32) -> T {
   if index < 0 || index >= self.values.length() {
     abort("Index out of bounds")
   }
@@ -397,9 +398,10 @@ pub fn[T] SnapshotArray::op_get(self : SnapshotArray[T], index : Int) -> T {
 }
 
 ///|
-pub fn[T] SnapshotArray::op_set(
+#alias("_[_]=_")
+pub fn[T] SnapshotArray::set_at(
   self : SnapshotArray[T],
-  index : Int,
+  index : Int32,
   value : T,
 ) -> Unit {
   if index < 0 || index >= self.values.length() {

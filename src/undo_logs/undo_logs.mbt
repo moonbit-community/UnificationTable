@@ -1,20 +1,20 @@
 ///|
 /// Undo logs for tracking changes in a data structure.
 pub enum Undo[T] {
-  NewElem(Int)
-  SetElem(Int, T)
+  NewElem(Int32)
+  SetElem(Int32, T)
 } derive(Debug)
 
 ///|
-pub type Snapshot = Int
+pub type Snapshot = Int32
 
 ///|
-pub fn[T] newElem(index : Int) -> Undo[T] {
+pub fn[T] newElem(index : Int32) -> Undo[T] {
   NewElem(index)
 }
 
 ///|
-pub fn[T] setElem(index : Int, value : T) -> Undo[T] {
+pub fn[T] setElem(index : Int32, value : T) -> Undo[T] {
   SetElem(index, value)
 }
 
@@ -26,14 +26,14 @@ pub struct UndoLogs[T] {
 }
 
 ///|
-pub fn[T] new(capacity? : Int = 0) -> UndoLogs[T] {
-  { logs: Array::new(capacity~), num_open_snapshots: 0 }
+pub fn[T] new(capacity~ : Int32 = 0) -> UndoLogs[T] {
+  { logs: Array(capacity~), num_open_snapshots: 0, }
 }
 
 ///|
-pub fn[T] from_iter(iter : Iter[Undo[T]], capacity? : Int = 0) -> UndoLogs[T] {
+pub fn[T] from_iter(iter : Iter[Undo[T]], capacity~ : Int32 = 0) -> UndoLogs[T] {
   let logs = new(capacity~)
-  logs.extend(iter)
+  logs.append_iter(iter)
   logs
 }
 
@@ -66,7 +66,7 @@ pub fn[T] UndoLogs::in_snapshot(self : UndoLogs[T]) -> Bool {
 /// logs.push(setElem(1, "test"))
 /// assert_eq(logs.length(), 2)
 /// ```
-pub fn[T] UndoLogs::length(self : UndoLogs[T]) -> Int {
+pub fn[T] UndoLogs::length(self : UndoLogs[T]) -> Int32 {
   self.logs.length()
 }
 
@@ -84,7 +84,7 @@ pub fn[T] UndoLogs::length(self : UndoLogs[T]) -> Int {
 /// logs.push(setElem(1, "test"))
 /// logs.commit(s1)
 /// ```
-pub fn[T] UndoLogs::num_open_snapshots(self : UndoLogs[T]) -> Int {
+pub fn[T] UndoLogs::num_open_snapshots(self : UndoLogs[T]) -> Int32 {
   self.num_open_snapshots
 }
 
@@ -131,12 +131,15 @@ pub fn[T] UndoLogs::clear(self : UndoLogs[T]) -> Unit {
 /// ```moonbit nocheck
 ///  let logs = new()
 ///  let new_logs = [newElem(0), setElem(1, "test")]
-///  logs.extend(new_logs.iter())
+///  logs.append_iter(new_logs.iter())
 ///  assert_true(logs.logs.length() == 2)
 ///  inspect(logs.logs[0], content="NewElem(0)")
 ///  inspect(logs.logs[1], content="SetElem(1, test)")
 /// ```
-pub fn[T] UndoLogs::extend(self : UndoLogs[T], logs : Iter[Undo[T]]) -> Unit {
+pub fn[T] UndoLogs::append_iter(
+  self : UndoLogs[T],
+  logs : Iter[Undo[T]],
+) -> Unit {
   logs.each(fn(log) { self.push(log) })
 }
 
@@ -305,7 +308,7 @@ pub fn[T] UndoLogs::iter(self : UndoLogs[T]) -> Iter[Undo[T]] {
 }
 
 ///|
-pub impl[T : Eq] Eq for Undo[T] with equal(self, other : Undo[T]) -> Bool {
+pub impl[T : Eq] Eq for Undo[T] with fn equal(self, other : Undo[T]) -> Bool {
   match (self, other) {
     (NewElem(index1), NewElem(index2)) => index1 == index2
     (SetElem(index1, value1), SetElem(index2, value2)) =>
@@ -315,7 +318,7 @@ pub impl[T : Eq] Eq for Undo[T] with equal(self, other : Undo[T]) -> Bool {
 }
 
 ///|
-pub impl[T : Show] Show for Undo[T] with to_string(self) {
+pub impl[T : Show] Show for Undo[T] with fn to_string(self) {
   match self {
     NewElem(index) => "NewElem(" + index.to_string() + ")"
     SetElem(index, value) =>
@@ -324,6 +327,6 @@ pub impl[T : Show] Show for Undo[T] with to_string(self) {
 }
 
 ///|
-pub impl[T : Show] Show for Undo[T] with output(self, logger : &Logger) {
+pub impl[T : Show] Show for Undo[T] with fn output(self, logger : &Logger) {
   logger.write_string(self.to_string())
 }

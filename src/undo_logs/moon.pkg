@@ -1,3 +1,7 @@
+import {
+  "moonbitlang/core/debug",
+}
+
 options(
   name: "BigOrangeQWQ/unification_table/undo_logs",
 )
