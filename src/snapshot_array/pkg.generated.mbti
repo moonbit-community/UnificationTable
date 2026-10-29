@@ -25,11 +25,11 @@ pub struct SnapshotArray[T] {
 }
 pub fn[T] SnapshotArray::action_since_snapshot(Self[T], Snapshot) -> ArrayView[@undo_logs.Undo[T]]
 pub fn[T] SnapshotArray::append_iter(Self[T], Iter[T]) -> Unit
-#alias("_[_]")
-pub fn[T] SnapshotArray::at(Self[T], Int32) -> T
 pub fn[T] SnapshotArray::commit(Self[T], Snapshot) -> Unit
 pub fn[T] SnapshotArray::commit_all(Self[T]) -> Unit
 pub fn[T] SnapshotArray::get(Self[T], Int32) -> T?
+#alias("_[_]")
+pub fn[T] SnapshotArray::get_at(Self[T], Int32) -> T
 pub fn[T] SnapshotArray::in_snapshot(Self[T]) -> Bool
 pub fn[T] SnapshotArray::length(Self[T]) -> Int32
 pub fn[T] SnapshotArray::push(Self[T], T) -> Unit

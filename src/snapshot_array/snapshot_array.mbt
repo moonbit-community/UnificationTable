@@ -390,7 +390,7 @@ pub fn[T] SnapshotArray::commit_all(self : SnapshotArray[T]) -> Unit {
 
 ///|
 #alias("_[_]")
-pub fn[T] SnapshotArray::at(self : SnapshotArray[T], index : Int32) -> T {
+pub fn[T] SnapshotArray::get_at(self : SnapshotArray[T], index : Int32) -> T {
   if index < 0 || index >= self.values.length() {
     abort("Index out of bounds")
   }

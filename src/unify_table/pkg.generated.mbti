@@ -24,12 +24,12 @@ pub struct Snapshot {
 pub struct UnificationTable[T] {
   values : @snapshot_array.SnapshotArray[VarValue[T]]
 }
-#alias("_[_]")
-pub fn[T] UnificationTable::at(Self[T], Int32) -> VarValue[T]
 pub fn[T] UnificationTable::commit(Self[T], Snapshot) -> Unit
 pub fn[T] UnificationTable::find(Self[T], VarIndex) -> VarIndex
 pub fn[T] UnificationTable::find_root(Self[T], VarValue[T]) -> VarValue[T]
 pub fn[T] UnificationTable::get(Self[T], Int32) -> VarValue[T]?
+#alias("_[_]")
+pub fn[T] UnificationTable::get_at(Self[T], Int32) -> VarValue[T]
 pub fn[T] UnificationTable::in_snapshot(Self[T]) -> Bool
 pub fn[T] UnificationTable::index(Self[T], Int32) -> VarIndex
 pub fn[T : Show] UnificationTable::output(Self[T], &Logger) -> Unit

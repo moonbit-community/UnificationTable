@@ -628,7 +628,7 @@ pub fn[T] UnificationTable::commit(
 
 ///|
 #alias("_[_]")
-pub fn[T] UnificationTable::at(
+pub fn[T] UnificationTable::get_at(
   self : UnificationTable[T],
   index : Int32,
 ) -> VarValue[T] {
