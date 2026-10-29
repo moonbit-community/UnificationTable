@@ -10,13 +10,13 @@ pub struct Snapshot {
 
 ///|
 pub struct VarIndex {
-  index : Int
+  index : Int32
 }
 
 ///|
 pub struct VarValue[T] {
   mut value : T
-  mut rank : Int
+  mut rank : Int32
   mut parent : VarIndex
 }
 
@@ -43,10 +43,10 @@ pub struct VarValue[T] {
 /// ```
 pub fn[T] new_var_value(
   value : T,
-  rank : Int,
+  rank : Int32,
   parent : VarIndex,
 ) -> VarValue[T] {
-  { value, rank, parent }
+  { value, rank, parent, }
 }
 
 ///|
@@ -88,7 +88,7 @@ pub fn[T] VarValue::redirect(self : VarValue[T], to : VarIndex) -> VarValue[T] {
 /// ```
 pub fn[T] VarValue::root(
   self : VarValue[T],
-  rank : Int,
+  rank : Int32,
   value : T,
 ) -> VarValue[T] {
   new_var_value(value, rank, self.parent)
@@ -113,7 +113,7 @@ pub fn[T] VarValue::modify(self : VarValue[T], value : T) -> Unit {
 
 ///|
 /// Creates a new `VarIndex` with the specified index.
-pub fn new_index(index : Int) -> VarIndex {
+pub fn new_index(index : Int32) -> VarIndex {
   { index, }
 }
 
@@ -124,12 +124,12 @@ pub fn new_snapshot(snapshot : @snapshot_array.Snapshot) -> Snapshot {
 }
 
 ///|
-pub impl[T : Eq] Eq for VarValue[T] with equal(self, other) {
+pub impl[T : Eq] Eq for VarValue[T] with fn equal(self, other) {
   self.value == other.value && self.parent == other.parent
 }
 
 ///|
-impl Eq for VarIndex with equal(self, other) {
+impl Eq for VarIndex with fn equal(self, other) {
   self.index == other.index
 }
 
@@ -147,8 +147,8 @@ impl Eq for VarIndex with equal(self, other) {
 /// let table : UnificationTable[Int] = new(capacity=10)
 /// inspect(table.values.length(), content="0")
 /// ```
-pub fn[T] new(capacity~ : Int) -> UnificationTable[T] {
-  { values: @snapshot_array.new(capacity~) }
+pub fn[T] new(capacity~ : Int32) -> UnificationTable[T] {
+  { values: @snapshot_array.new(capacity~), }
 }
 
 ///|
@@ -167,7 +167,7 @@ pub fn[T] new(capacity~ : Int) -> UnificationTable[T] {
 /// assert_true(table.values.length() == 1)
 /// ```
 pub fn[T] UnificationTable::push(self : UnificationTable[T], value : T) -> Unit {
-  self.values.push({ value, rank: 0, parent: new_index(self.values.length()) })
+  self.values.push({ value, rank: 0, parent: new_index(self.values.length()), })
 }
 
 ///|
@@ -217,7 +217,7 @@ pub fn[T] UnificationTable::push_var(
 /// ```
 pub fn[T] UnificationTable::get(
   self : UnificationTable[T],
-  index : Int,
+  index : Int32,
 ) -> VarValue[T]? {
   self.values.get(index)
 }
@@ -243,7 +243,7 @@ pub fn[T] UnificationTable::get(
 /// ```
 pub fn[T] UnificationTable::index(
   self : UnificationTable[T],
-  index : Int,
+  index : Int32,
 ) -> VarIndex {
   if index < 0 || index >= self.values.length() {
     abort("Index out of bounds")
@@ -383,7 +383,7 @@ pub fn[T] UnificationTable::update(
 /// ```
 pub fn[T] UnificationTable::redirect_root(
   self : UnificationTable[T],
-  new_rank : Int,
+  new_rank : Int32,
   old_index : VarIndex,
   new_index : VarIndex,
   new_value : T,
@@ -627,24 +627,26 @@ pub fn[T] UnificationTable::commit(
 }
 
 ///|
-pub fn[T] UnificationTable::op_get(
+#alias("_[_]")
+pub fn[T] UnificationTable::get_at(
   self : UnificationTable[T],
-  index : Int,
+  index : Int32,
 ) -> VarValue[T] {
   return self.get(index).unwrap()
 }
 
 ///|
-pub fn[T] UnificationTable::op_set(
+#alias("_[_]=_")
+pub fn[T] UnificationTable::set_at(
   self : UnificationTable[T],
-  index : Int,
+  index : Int32,
   value : VarValue[T],
 ) -> Unit {
   self.set(new_index(index), value)
 }
 
 ///|
-pub impl[T : Show] Show for VarValue[T] with output(self, logger : &Logger) {
+pub impl[T : Show] Show for VarValue[T] with fn output(self, logger : &Logger) {
   logger
   ..write_string("VarValue { value: ")
   ..write_object(self.value)
@@ -656,7 +658,7 @@ pub impl[T : Show] Show for VarValue[T] with output(self, logger : &Logger) {
 }
 
 ///|
-pub impl Show for VarIndex with output(self, logger : &Logger) {
+pub impl Show for VarIndex with fn output(self, logger : &Logger) {
   logger
   ..write_string("VarIndex { index: ")
   ..write_object(self.index)
@@ -664,7 +666,7 @@ pub impl Show for VarIndex with output(self, logger : &Logger) {
 }
 
 ///|
-pub impl[T : Show] Show for UnificationTable[T] with output(
+pub impl[T : Show] Show for UnificationTable[T] with fn output(
   self,
   logger : &Logger,
 ) {
